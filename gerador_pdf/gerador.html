@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de PDF</title>
+    <!-- Bibliotecas JS de CDNs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <!-- Painel de Configurações -->
+    <div id="settings">
+        <h2>Configurações</h2>
+        
+        <div class="control-group">
+            <h3>1. Upload</h3>
+            <div id="drop-zone">
+                Arraste e solte imagens ou um arquivo ZIP aqui, ou clique para selecionar.
+                <input type="file" id="file-input" multiple accept="image/*,.zip" style="display: none;">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>2. Layout da Página</h3>
+            <div class="control-row">
+                <div>
+                    <label for="page-type">Tipo de Folha:</label>
+                    <select id="page-type">
+                        <option value="a4">A4</option>
+                        <option value="letter">Carta</option>
+                        <option value="legal">Ofício</option>
+                    </select>
+                </div>
+                <!-- NOVO: SELETOR DE ORIENTAÇÃO -->
+                <div>
+                    <label for="page-orientation">Orientação:</label>
+                    <select id="page-orientation">
+                        <option value="portrait">Retrato</option>
+                        <option value="landscape">Paisagem</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="settings-divider"></div>
+            
+            <label style="display: inline-flex; align-items: center; font-weight: bold; font-size: 14px; cursor: pointer;">
+                <input type="checkbox" id="auto-layout-checkbox">
+                <span style="margin-left: 8px;">Layout Automático</span>
+            </label>
+        </div>
+        
+        <div id="auto-layout-settings" style="display:none;">
+            <div class="control-group">
+                <p style="font-size:12px; margin-top:0; color:#555;">Defina a grade e o layout será calculado para preencher a página.</p>
+                <div class="control-row">
+                    <div>
+                        <label for="auto-cols">Colunas:</label>
+                        <input type="number" id="auto-cols" value="3" min="1">
+                    </div>
+                    <div>
+                        <label for="auto-rows">Linhas:</label>
+                        <input type="number" id="auto-rows" value="3" min="1">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="manual-layout-settings">
+            <div class="control-group">
+                 <label>Margens da Página (mm):</label>
+                <div class="control-row">
+                   <div><label for="page-margin-top" style="font-weight:normal; font-size:12px;">Superior</label><input type="number" id="page-margin-top" value="0" min="0"></div>
+                   <div><label for="page-margin-bottom" style="font-weight:normal; font-size:12px;">Inferior</label><input type="number" id="page-margin-bottom" value="0" min="0"></div>
+                </div>
+                 <div class="control-row" style="margin-top: 5px;">
+                   <div><label for="page-margin-left" style="font-weight:normal; font-size:12px;">Esquerda</label><input type="number" id="page-margin-left" value="0" min="0"></div>
+                    <div><label for="page-margin-right" style="font-weight:normal; font-size:12px;">Direita</label><input type="number" id="page-margin-right" value="0" min="0"></div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>3. Layout das Imagens</h3>
+                <div class="control-row">
+                    <div><label for="image-width">Largura (mm):</label><input type="number" id="image-width" value="55" min="1"></div>
+                    <div><label for="image-height">Altura (mm):</label><input type="number" id="image-height" value="87.34" min="1"></div>
+                </div>
+                <div style="margin-top: 10px;">
+                    <label style="display: inline-flex; align-items: center; font-weight: normal; font-size: 14px; cursor: pointer;">
+                        <input type="checkbox" id="keep-proportion" disabled><span style="margin-left: 8px;">Manter Proporção</span>
+                    </label>
+                    <span id="proportion-info" style="font-size: 11px; color: #555; display: block;">(baseado na 1ª imagem)</span>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label>Espaçamento entre Imagens (mm):</label>
+                <div class="control-row">
+                    <div><label for="margin-h" style="font-weight:normal; font-size:12px;">Horizontal</label><input type="number" id="margin-h" value="0" min="0"></div>
+                    <div><label for="margin-v" style="font-weight:normal; font-size:12px;">Vertical</label><input type="number" id="margin-v" value="0" min="0"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>4. Extras</h3>
+            <label style="display:inline-flex; align-items:center; font-weight:normal; cursor:pointer;">
+                <input type="checkbox" id="show-filename"><span style="margin-left: 8px;">Mostrar nome do arquivo</span>
+            </label>
+        </div>
+        
+        <div id="alert-box"></div>
+
+        <button id="generate-pdf-btn">Gerar PDF</button>
+        <button id="reset-btn">Limpar Tudo</button>
+    </div>
+
+    <div id="preview-container">
+        <h2>Pré-visualização</h2>
+        <div id="preview-area"></div>
+        <div id="page-nav">
+            <button id="prev-page">&lt; Anterior</button>
+            <span id="page-info">Página 1 de 1</span>
+            <button id="next-page">Próxima &gt;</button>
+        </div>
+    </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

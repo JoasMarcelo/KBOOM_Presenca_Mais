@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="theme-color" content="#4361ee">
+        <title>Presença+</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+        <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+        <link rel="icon" href="assets/img/logos/default_logo.ico" type="image/x-icon">
+
+    </head>
+    <body>
+        <div class="container">
+            <!-- TELA DE SELEÇÃO DE ESCOLA -->
+            <div id="school-selection-screen">
+                <header>
+                    <div class="header-content">
+                        <img src="assets/img/logos/Presenca_mais.svg" alt="Logo">
+                        <img src="assets/img/logos/LOGO_BRANCA.svg" alt="Logo_KBOOM">
+                    </div>
+                </header>
+                <main class="welcome-main">
+                    <h2 id="school-selection-title">Selecione uma Escola</h2>
+                    <div id="school-list" class="school-list"></div>
+                    <div class="welcome-actions">
+                        <button id="add-school-btn" class="btn btn-large">Cadastrar Nova Escola</button>
+                    </div>
+                </main>
+            </div>
+
+            <!-- PAINEL PRINCIPAL DA APLICAÇÃO -->
+            <div id="main-panel" class="hidden">
+                <header>
+                    <div class="header-content">
+                        <h1 id="school-name-header">Nome da Escola</h1>
+                        <div class="header-controls">
+                            <span id="db-status-header" class="header-status"></span>
+                            <button id="change-school-btn" class="btn">Trocar de Escola</button>
+                        </div>
+                    </div>
+                </header>
+                
+                <nav class="tabs">
+                    <button class="tab-link active" data-tab="tab-importar">Importar Alunos</button>
+                    <button class="tab-link" data-tab="cadastro-manual">Cadastrar Aluno</button>
+                    <button class="tab-link" data-tab="registrar-presenca">Registrar Presença</button>
+                    <button class="tab-link" data-tab="alunos-registrados">Alunos Registrados</button>
+                    <button class="tab-link" data-tab="crachas">Crachás</button>                  
+                    <button class="tab-link" data-tab="tab-exportar">Exportar Backup</button>
+                    <button class="tab-link" data-tab="configuracoes">Configurações</button>
+                </nav>
+
+                <main>
+                    <!-- ABA DE IMPORTAÇÃO -->
+                    <div id="tab-importar" class="tab-content active">
+                        <div class="card">
+                            <h2>Importar Alunos</h2>
+                            <p>Arraste e solte uma planilha (.xlsx) ou um arquivo de banco de dados (.db) na área abaixo para adicionar ou atualizar alunos.</p>
+                            <div id="import-drop-zone">
+                                <p>Arraste e solte o arquivo aqui ou</p>
+                                <input type="file" id="import-file-input" accept=".xlsx, .xls, .db, .sqlite" class="hidden">
+                                <button id="import-browse-btn" class="btn">Procurar Arquivo</button>
+                            </div>
+                            <div id="import-status" class="status-box" style="display: none;"></div>
+                        </div>
+                    </div>
+
+                    <!-- ABA DE CADASTRO MANUAL -->
+                    <div id="cadastro-manual" class="tab-content">
+                        <div class="card">
+                            <h2>Cadastro Manual de Alunos</h2>
+                            <p>Adicione novos alunos à base de dados da escola. IDs são gerados automaticamente ao salvar.</p>
+                            <div class="manual-cadastro-actions">
+                                <button id="add-aluno-row-btn" class="btn">Adicionar Linha</button>
+                                <button id="save-manual-alunos-btn" class="btn btn-success">Salvar Novos Alunos</button>
+                            </div>
+                            <div id="manual-cadastro-status" class="status-box" style="display: none;"></div>
+                        </div>
+                        <div class="table-container">
+                            <table id="tabela-cadastro-manual">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Turma</th>
+                                        <th>Código de Barras</th>
+                                        <th>UID RFID</th>
+                                        <th>Foto (Opcional)</th>
+                                        <th>Ação</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody id="tabela-cadastro-manual-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- ABA REGISTRAR PRESENÇA -->
+                    <div id="registrar-presenca" class="tab-content">
+                        <div class="card">
+                            <h2>Registro de Presença</h2>
+                            <p>Aponte o leitor para o código de barras ou digite o código e pressione Enter.</p>
+                            <div class="input-group">
+                                <input type="text" id="barcode-input" placeholder="Aguardando código do aluno...">
+                                <button id="search-student-btn" class="btn">Buscar Aluno</button>
+                            </div>
+                            <div id="presence-confirmation-area" class="confirmation-container hidden">
+                                <!-- Conteúdo gerado via JS -->
+                            </div>
+                            <div id="status-presenca" class="status-box">Aguardando leitura...</div>
+                        </div>
+
+                        <div class="card">
+                            <h3>Presenças Registradas Hoje</h3>
+                            <div class="table-container">
+                                <table id="tabela-presenca">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Turma</th>
+                                            <th>Hora da Presença</th>
+                                            <th>Ação</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabela-presenca-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- ABA ALUNOS REGISTRADOS -->
+                    <div id="alunos-registrados" class="tab-content">
+                        <div class="card">
+                            <h2>Alunos Registrados na Base</h2>
+                            <div class="input-group">
+                                <input type="text" id="search-aluno-input" placeholder="Buscar por nome, turma, código de barras ou UID do RFID...">
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <table id="tabela-alunos">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Turma</th>
+                                        <th>Código de Barras</th>
+                                        <th>UID RFID</th>
+                                        <th>Foto</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabela-alunos-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- ABA CRACHÁS -->
+                    <div id="crachas" class="tab-content">
+                        <div class="card">
+                            <h2>Gerenciamento de Crachás</h2>
+                            <div class="cracha-manager">
+                                <div class="aluno-list">
+                                    <h3>Selecione um Aluno</h3>
+                                    <ul id="lista-crachas-alunos"></ul>
+                                </div>
+                                <div class="cracha-preview">
+                                    <h3>Visualização</h3>
+                                    <canvas id="cracha-canvas" width="638" height="1000"></canvas>
+                                    <button id="personalizar-layout-btn" class="btn btn-secondary">Personalizar Layout</button>
+                                    <div class="button-group">
+                                        <button id="download-cracha-btn" class="btn" disabled>Baixar Crachá</button>
+                                        <button id="download-todos-crachas-btn" class="btn">Baixar Todos (ZIP)</button>
+                                    </div>
+                                    <div id="zip-status" class="status-box" style="display:none;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <!-- ABA DE EXPORTAR BACKUP -->
+                    <div id="tab-exportar" class="tab-content">
+                        <div class="card">
+                            <h2>Exportar Backup do Banco de Dados</h2>
+                            <p>Faça o download de um backup completo do banco de dados da escola atual. Este arquivo pode ser usado para restaurar os dados.</p>
+                            <button id="export-db-btn" class="btn btn-large">Baixar Backup (.db)</button>
+                        </div>
+                    </div>
+                    <!-- ABA DE CONFIGURAÇÕES -->
+                    <div id="configuracoes" class="tab-content">
+                        <div class="card">
+                            <h2>Configurações do RFID</h2>
+                            <button class="btn" id="btnConnect">Conectar Serial</button>
+                            
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <!-- MODAIS -->
+        <div id="add-school-modal" class="modal-overlay hidden">
+            <div class="modal-content">
+                <form id="add-school-form">
+                    <h2 id="modal-title">Cadastrar Nova Escola</h2>
+                    <div class="form-group">
+                        <label for="new-school-name">Nome da Escola</label>
+                        <input type="text" id="new-school-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Logo da Escola (Opcional)</label>
+                        <div class="input-group">
+                            <button type="button" id="select-logo-btn" class="btn">Selecionar Logo</button>
+                            <span id="logo-file-name" class="file-name-display">Nenhum arquivo</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Template do Crachá</label>
+                         <div class="input-group">
+                            <button type="button" id="select-template-btn" class="btn">Selecionar Template</button>
+                            <span id="template-file-name" class="file-name-display">Nenhum arquivo</span>
+                        </div>
+                    </div>
+                    <!-- Pasta principal das planilhas -->
+                    <div class="form-group">
+                        <label>Pasta para Planilhas de Presença</label>
+                        <p>Selecione a pasta principal onde as planilhas de presença serão salvas para esta escola.</p>
+                        <button type="button" id="select-folder-btn-modal" class="btn">Selecionar Pasta Principal</button>
+                        <div id="folder-status-modal" class="status-box">Nenhuma pasta selecionada.</div>
+                    </div>
+
+                    <!-- Pasta de backups -->
+                    <div class="form-group">
+                        <label>Pasta de Backups da Base de Dados</label>
+                        <p>Antes de qualquer alteração, uma cópia de segurança será criada. Por padrão, ela é salva na subpasta "backups" da pasta de planilhas.</p>
+                        <div class="input-group">
+                            <button type="button" id="select-backup-folder-btn-modal" class="btn">Alterar Pasta de Backup</button>
+                            <button type="button" id="reset-backup-folder-btn-modal" class="btn btn-secondary">Usar Padrão</button>
+                        </div>
+                        <div id="backup-folder-status-modal" class="status-box">Nenhuma pasta selecionada.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Base de Dados de Alunos (.db)</label>
+                        <div class="input-group">
+                            <button type="button" id="select-db-btn" class="btn">Usar Existente</button>
+                            <span class="form-group-divider">ou</span>
+                            <button type="button" id="create-db-modal-btn" class="btn">Criar Nova</button>
+                        </div>
+                        <span id="db-file-name" class="file-name-display">Nenhum arquivo</span>
+                    </div>
+                    <div id="modal-status" class="status-box hidden"></div>
+                    <div class="modal-actions">
+                        <button type="button" id="cancel-modal-btn" class="btn btn-secondary">Cancelar</button>
+                        <button type="submit" class="btn">Salvar Escola</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="template-selector-modal" class="modal-overlay hidden"> <!-- A CLASSE 'hidden' DO PRIMEIRO CÓDIGO -->
+            <div class="modal-content modal-lg">
+            
+                <!-- A ESTRUTURA INTERNA CORRETA DO SEGUNDO CÓDIGO -->
+                <div class="modal-header">
+                    <div>
+                        <h2>Selecione um Template de Crachá</h2>
+                        <p>Escolha um dos modelos ou envie um novo.</p>
+                    </div>
+                </div>
+
+                <div class="modal-body">
+                    <!-- A galeria deve começar vazia, o JavaScript vai preenchê-la -->
+                    <div id="template-gallery" class="template-gallery"></div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" id="cancel-template-modal-btn" class="btn btn-secondary">Cancelar</button>
+                    <button type="button" id="confirm-template-btn" class="btn">Confirmar Seleção</button>
+                </div>
+                
+            </div>
+        </div>
+
+        <div id="export-options-modal" class="modal-overlay hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Escolha o Formato de Saída</h2>
+                    <button id="cancel-export-btn" class="btn-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Como você deseja salvar os crachás?</p>
+                    <div class="modal-actions">
+                        <button id="export-direct-btn" class="btn btn-large"></button>
+                        <button id="export-pdf-btn" class="btn btn-large btn-secondary">Organizar em PDF</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="toast-container"></div>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.5/JsBarcode.all.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+        
+        <!-- No final do seu <body> -->
+        <script type="module" src="js/main.js"></script>
+    </body>
+</html>
