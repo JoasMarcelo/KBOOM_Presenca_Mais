@@ -13,7 +13,7 @@
 ---
 
 Reportagem da **Globo** sobre o projeto 
-https://g1.globo.com/pe/pernambuco/ne2/video/estudantes-de-escola-publica-de-igarassu-desenvolvem-sistema-para-combater-evasao-escolar-14106197.ghtml?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAb21jcAPc7DBleHRuA2FlbQIxMQBzcnRjBmFwcF9pZA81NjcwNjczNDMzNTI0MjcAAae3d84khK-vaAfpQVuXdlLg3Kn7SOLKODcjJybc1v_mxhcdmGc_uyz0PRynzg_aem_SEda61tGxC41a9GQwiTUQg
+[G1|Globo](https://g1.globo.com/pe/pernambuco/ne2/video/estudantes-de-escola-publica-de-igarassu-desenvolvem-sistema-para-combater-evasao-escolar-14106197.ghtml?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAb21jcAPc7DBleHRuA2FlbQIxMQBzcnRjBmFwcF9pZA81NjcwNjczNDMzNTI0MjcAAae3d84khK-vaAfpQVuXdlLg3Kn7SOLKODcjJybc1v_mxhcdmGc_uyz0PRynzg_aem_SEda61tGxC41a9GQwiTUQg)
 
 ## 📄 Licença
 
