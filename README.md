@@ -12,6 +12,8 @@
 
 ---
 
+Reportagem da **Globo** sobre o projeto https://www.instagram.com/reel/DRLd4hXjAl9
+
 ## 📄 Licença
 
 Este projeto está licenciado sob a **Creative Commons BY-NC-ND 4.0**.  
@@ -26,3 +28,5 @@ Você pode utilizar e compartilhar o conteúdo, desde que atribua o autor, não 
 
 - **Site:** https://joasmarcelo.github.io/KBOOM_Presenca_Mais/  
 - **Repositório GitHub:** https://github.com/JoasMarcelo/KBOOM_Presenca_Mais
+- **KBOOM:** 
+https://www.instagram.com/kboom.br?igsh=djVnaHlkemtiaWp6
